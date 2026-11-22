@@ -1,0 +1,17 @@
+{
+  "name": "Maribelinha e as Borboletas",
+  "short_name": "Maribelinha",
+  "description": "Ajude a Maribelinha a salvar as borboletas do Rei Trovão!",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#24324a",
+  "theme_color": "#ffc928",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
