@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="HSprogram: criação de sites para comércio em Cidreira e no litoral norte gaúcho. Cardápio com pedido no WhatsApp, agendamento e reservas. Preço fechado a partir de R$ 450.">
+<meta name="theme-color" content="#131a2c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HSprogram">
+<meta property="og:description" content="HSprogram: criação de sites para comércio em Cidreira e no litoral norte gaúcho. Cardápio com pedido no WhatsApp, agendamento e reservas. Preço fechado a partir de R$ 450.">
+<meta property="og:url" content="https://hsprogram.hallysilva.com.br/">
+<meta property="og:image" content="https://hsprogram.hallysilva.com.br/img/lancheria.jpg">
+<link rel="canonical" href="https://hsprogram.hallysilva.com.br/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>HSprogram</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"HSprogram","description":"Criação de sites para comércio local: cardápio com pedidos, agendamento e páginas para negócios.","telephone":"+55 51 99604-3473","areaServed":["Cidreira","Tramandaí","Imbé","Balneário Pinhal","Litoral Norte do Rio Grande do Sul"],"address":{"@type":"PostalAddress","addressLocality":"Cidreira","addressRegion":"RS","addressCountry":"BR"},"priceRange":"R$ 450 a R$ 900"}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra fixa; abertura com celular mostrando um site real; planos em 3 cartões + mensalidade; trabalhos com fotos; passos; dúvidas; orçamento que vira mensagem de WhatsApp */
+:root {
+  --bg: #f3f5f9;
+  --surface: #ffffff;
+  --ink: #131a2c;
+  --muted: #5b6478;
+  --line: #dfe4ee;
+  --cobalt: #2f56e0;
+  --cobalt-soft: #e7edff;
+  --coral: #f2603a;
+  --wa: #1a9e4f;
+  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0d1120; --surface: #151b2e; --ink: #e9edf7; --muted: #a2abc0; --line: #262e45; --cobalt: #8aa3ff; --cobalt-soft: #1b2445; --coral: #ff8a63; --wa: #3cc475; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0d1120; --surface: #151b2e; --ink: #e9edf7; --muted: #a2abc0; --line: #262e45; --cobalt: #8aa3ff; --cobalt-soft: #1b2445; --coral: #ff8a63; --wa: #3cc475; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 80px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+a { color: var(--cobalt); }
+.wrap { width: 100%; max-width: 1120px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; text-wrap: balance; margin: 0; }
+.eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cobalt); }
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; padding: 12px 18px; font-weight: 700; text-decoration: none; border: 2px solid transparent; cursor: pointer; }
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn-wa { background: var(--wa); color: #fff; }
+.btn-line { border-color: var(--line); color: var(--ink); background: var(--surface); }
+.btn[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+section { padding-block: 56px; }
+.head { display: grid; gap: 8px; margin-bottom: 26px; max-width: 640px; }
+.head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; }
+.head p { margin: 0; color: var(--muted); }
+
+/* aviso de configuração (some quando o número estiver preenchido) */
+.setup { background: #fff3cd; color: #4a3500; font-size: 14px; font-weight: 600; text-align: center; padding: 8px 16px; }
+
+/* barra do topo */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 18px; padding-block: 10px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); min-width: 0; }
+.logo i { width: 38px; height: 38px; border-radius: 11px; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-style: normal; font-family: var(--display); font-weight: 800; font-size: 15px; flex: none; }
+.logo b { font-family: var(--display); font-size: 1.2rem; font-weight: 800; display: block; line-height: 1; }
+.logo small { color: var(--muted); font-size: 12.5px; display: block; margin-top: 2px; white-space: nowrap; }
+.top nav { display: flex; gap: 18px; margin-left: auto; }
+.top nav a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+.top .btn { padding: 9px 14px; }
+
+/* abertura */
+.hero { padding-block: 48px 40px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 40px; align-items: center; }
+.hero h1 { font-size: clamp(2.3rem, 5.6vw, 4rem); font-weight: 800; margin: 10px 0 16px; letter-spacing: -0.015em; }
+.hero h1 em { font-style: normal; color: var(--cobalt); }
+.hero p { margin: 0 0 24px; font-size: 1.1rem; color: var(--muted); max-width: 52ch; }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 26px; font-size: 14.5px; color: var(--muted); }
+.facts b { color: var(--ink); }
+.stage { position: relative; display: grid; place-items: center; padding: 10px 0 20px; }
+.phone { width: min(280px, 78vw); aspect-ratio: 390 / 760; border-radius: 38px; background: #0b0f1a; padding: 10px; box-shadow: 0 30px 60px rgba(19, 26, 44, 0.25); }
+.phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 29px; display: block; }
+.chip { position: absolute; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 9px 12px; font-size: 13.5px; font-weight: 700; box-shadow: 0 10px 24px rgba(19, 26, 44, 0.14); display: flex; align-items: center; gap: 8px; max-width: 220px; }
+.chip span { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; color: #fff; flex: none; font-size: 14px; }
+.chip.a { left: 0; top: 18%; } .chip.a span { background: var(--wa); }
+.chip.b { right: 0; bottom: 20%; } .chip.b span { background: var(--coral); }
+
+/* para quem */
+.who { padding-block: 0 8px; }
+.who ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.who li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 14.5px; }
+
+/* planos */
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 14px; position: relative; }
+.plan.star { border: 2px solid var(--cobalt); }
+.plan .badge { position: absolute; top: -12px; left: 22px; background: var(--cobalt); color: var(--bg); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.plan h3 { font-size: 1.35rem; font-weight: 800; }
+.plan .for { margin: -6px 0 0; color: var(--muted); font-size: 14.5px; }
+.plan .price { font-family: var(--display); font-weight: 800; font-size: 2.3rem; line-height: 1; }
+.plan .price small { font-family: var(--body); font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 15px; }
+.plan li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; }
+.plan li::before { content: ""; width: 14px; height: 8px; border-left: 2.5px solid var(--wa); border-bottom: 2.5px solid var(--wa); transform: rotate(-45deg); margin-top: 6px; }
+.plan .foot { margin-top: auto; display: grid; gap: 8px; }
+.plan .eg { font-size: 14px; font-weight: 600; }
+.monthly { margin-top: 16px; background: var(--ink); color: var(--bg); border-radius: 18px; padding: 20px 22px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 24px; align-items: center; }
+.monthly .price { font-family: var(--display); font-weight: 800; font-size: 2rem; line-height: 1; }
+.monthly .price small { font-family: var(--body); font-size: 14px; font-weight: 600; opacity: 0.75; }
+.monthly p { margin: 0; font-size: 15px; opacity: 0.9; }
+.terms { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14.5px; color: var(--muted); }
+.terms b { color: var(--ink); }
+.promo { margin-top: 14px; border: 2px dashed var(--coral); border-radius: 14px; padding: 12px 16px; font-weight: 600; font-size: 15px; }
+.promo b { color: var(--coral); }
+
+/* prévia ao vivo */
+.try { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.try .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: 36px; align-items: center; }
+.try form { display: grid; gap: 14px; margin-top: 20px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.sw { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); cursor: pointer; padding: 0; }
+.sw[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); }
+.mock-phone { width: min(300px, 82vw); margin-inline: auto; border-radius: 38px; background: #0b0f1a; padding: 10px; box-shadow: 0 30px 60px rgba(19, 26, 44, 0.25); }
+.mock { --c: #2f56e0; border-radius: 29px; overflow: hidden; background: #fff; color: #1b1d24; height: 560px; display: flex; flex-direction: column; font-family: var(--body); position: relative; }
+.mock .bar { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid #eceef3; }
+.mock .bar i { width: 30px; height: 30px; border-radius: 9px; background: var(--c); color: #fff; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 14px; flex: none; }
+.mock .bar b { font-size: 14.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mock .bar em { margin-left: auto; font-style: normal; font-size: 10.5px; font-weight: 700; background: #e7f6ec; color: #1d8a4a; padding: 3px 7px; border-radius: 999px; white-space: nowrap; }
+.mock .hero2 { background: var(--c); color: #fff; padding: 22px 16px; display: grid; gap: 8px; }
+.mock .hero2 h4 { margin: 0; font-family: var(--display); font-size: 1.7rem; line-height: 1; font-weight: 800; overflow-wrap: anywhere; }
+.mock .hero2 p { margin: 0; font-size: 13px; opacity: 0.92; }
+.mock .hero2 span { justify-self: start; background: #fff; color: var(--c); font-weight: 800; font-size: 12.5px; padding: 7px 12px; border-radius: 9px; margin-top: 4px; }
+.mock .list { padding: 14px 16px; display: grid; gap: 8px; }
+.mock .list h5 { margin: 0 0 2px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6b6f7c; }
+.mock .list div { display: flex; justify-content: space-between; gap: 8px; border: 1px solid #eceef3; border-radius: 10px; padding: 9px 11px; font-size: 13px; font-weight: 600; }
+.mock .list div b { color: var(--c); white-space: nowrap; }
+.mock .wa { margin: auto 12px 12px; background: #1faa53; color: #fff; border-radius: 12px; padding: 11px; text-align: center; font-weight: 800; font-size: 13.5px; }
+.try .after { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.try .after small { color: var(--muted); }
+@media (max-width: 860px) { .try .wrap { grid-template-columns: minmax(0, 1fr); } }
+
+/* serviços extras */
+.extras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 30px; }
+.extra { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.extra .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--cobalt-soft); display: grid; place-items: center; font-size: 20px; }
+.extra b { font-size: 15.5px; }
+.extra p { margin: 0; color: var(--muted); font-size: 14px; }
+.extra .money { font-family: var(--display); font-weight: 800; font-size: 1.35rem; }
+.extras-title { margin-top: 34px; font-size: 1.4rem; font-weight: 800; }
+.checks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.checks label { display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; cursor: pointer; }
+.checks input { accent-color: var(--cobalt); width: 16px; height: 16px; }
+.estimate { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line); padding-top: 10px; font-weight: 700; }
+.estimate b { font-family: var(--display); font-size: 1.4rem; }
+.fab { position: fixed; right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 25; width: 58px; height: 58px; border-radius: 50%; background: var(--wa); color: #fff; display: grid; place-items: center; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25); transform: scale(0); transition: transform 0.2s ease; }
+.fab.on { transform: scale(1); }
+.fab svg { width: 30px; height: 30px; }
+@media (prefers-reduced-motion: reduce) { .fab { transition: none; } }
+@media (max-width: 860px) { .extras { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .checks { grid-template-columns: minmax(0, 1fr); } .extra { padding: 13px; } .extra p { font-size: 13px; } }
+
+/* trabalhos */
+.works { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+.work { grid-column: span 2; }
+.work.big { grid-column: span 2; }
+.work { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+.work .shot { aspect-ratio: 4 / 3; background: var(--cobalt-soft); overflow: hidden; }
+.work .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.work .txt { padding: 14px 16px 16px; display: grid; gap: 6px; flex: 1; align-content: start; }
+.work .kind { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.work h3 { font-size: 1.1rem; font-weight: 800; }
+.work p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.work a { font-weight: 700; font-size: 14.5px; margin-top: 4px; }
+
+/* passos */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
+.step { border-top: 3px solid var(--ink); padding-top: 14px; }
+.step b { font-family: var(--display); font-size: 1.2rem; display: block; margin-bottom: 4px; }
+.step b::before { counter-increment: s; content: counter(s) ". "; color: var(--cobalt); }
+.step p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* dúvidas */
+.faq { display: grid; gap: 10px; max-width: 760px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; }
+.faq summary { font-weight: 700; cursor: pointer; }
+.faq p { margin: 8px 0 0; color: var(--muted); }
+
+/* orçamento */
+.quote { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.quote .wrap { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 36px; align-items: start; }
+.quote form { display: grid; gap: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 13.5px; font-weight: 700; color: var(--muted); }
+.field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 10px 12px; }
+.field textarea { min-height: 84px; resize: vertical; }
+.contact { display: grid; gap: 10px; margin-top: 18px; font-size: 15.5px; }
+.contact div { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.contact span { color: var(--muted); font-size: 14px; min-width: 88px; }
+.contact b { user-select: all; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); font-size: 14px; color: var(--muted); }
+
+@media (max-width: 960px) { .works { grid-template-columns: repeat(2, minmax(0, 1fr)); } .work, .work.big { grid-column: auto; } }
+@media (max-width: 860px) {
+  .top nav { display: none; }
+  .top .btn { margin-left: auto; }
+  .hero .wrap, .quote .wrap { grid-template-columns: minmax(0, 1fr); }
+  .plans, .steps { grid-template-columns: minmax(0, 1fr); }
+  .monthly { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .works { grid-template-columns: minmax(0, 1fr); }
+  .row2 { grid-template-columns: minmax(0, 1fr); }
+  .logo small { display: none; }
+  .top .btn .long { display: none; }
+  .chip { font-size: 12.5px; max-width: 180px; }
+}
+</style>
+</head>
+<body>
+<div class="setup" id="setup" hidden>Falta colocar o seu número de WhatsApp no começo do código (campo <code>whatsapp</code>).</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio"><i>HS</i><div><b id="t-nome"></b><small id="t-sub"></small></div></a>
+    <nav aria-label="Seções"><a href="#previa">Veja o seu</a><a href="#planos">Planos e preços</a><a href="#trabalhos">Trabalhos</a><a href="#duvidas">Dúvidas</a></nav>
+    <a class="btn btn-wa" data-wa="topo" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span>WhatsApp</span></a>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow" id="t-eyebrow"></span>
+        <h1>Seu comércio no <em>celular de cada cliente</em></h1>
+        <p>Faço sites simples, rápidos e bonitos para negócios da região: cardápio com pedido no WhatsApp, agendamento para barbearia e salão, página com mapa e horário. Você fala comigo direto, sem complicação.</p>
+        <div class="ctas">
+          <a class="btn btn-wa" data-wa="orcamento" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>Pedir orçamento no WhatsApp</a>
+          <a class="btn btn-line" href="#planos">Ver planos e preços</a>
+        </div>
+        <div class="facts"><span><b>Pronto em até 7 dias</b></span><span><b>Feito para celular</b></span><span><b>Você paga só no fim</b> a outra metade</span></div>
+      </div>
+      <div class="stage">
+        <div class="phone"><img src="img/lancheria.jpg" alt="Site de lancheria feito pela HSprogram, aberto no celular" width="390" height="760"></div>
+        <div class="chip a"><span aria-hidden="true">✓</span>Pedido chegou no WhatsApp</div>
+        <div class="chip b"><span aria-hidden="true">R$</span>Pix com o valor certo</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="who" aria-label="Para quem eu faço sites">
+    <div class="wrap"><ul>
+      <li>Lancheria e pizzaria</li><li>Açaí e sorveteria</li><li>Barbearia</li><li>Salão e manicure</li><li>Pousada</li><li>Pet shop</li><li>Oficina</li><li>Loja de roupas</li><li>Clínica e consultório</li><li>Mercado e padaria</li>
+    </ul></div>
+  </section>
+
+  <section class="try" id="previa">
+    <div class="wrap">
+      <div>
+        <div class="head" style="margin-bottom:0"><span class="eyebrow">Experimente agora</span><h2>Veja como fica o site do seu negócio</h2><p>Escreva o nome, escolha o tipo e a cor. A prévia ao lado muda na hora.</p></div>
+        <form id="pv-form" novalidate>
+          <div class="field"><label for="pv-nome">Nome do seu negócio</label><input id="pv-nome" maxlength="40" placeholder="Ex.: Pizzaria do Porto" value="Pizzaria do Porto"></div>
+          <div class="field"><label for="pv-tipo">Tipo de negócio</label><select id="pv-tipo"></select></div>
+          <div class="field"><span style="font-size:13.5px;font-weight:700;color:var(--muted)">Cor principal</span><div class="swatches" id="pv-cores" role="group" aria-label="Cor principal"></div></div>
+        </form>
+        <div class="after"><a class="btn btn-wa" id="pv-quero" href="#" target="_blank" rel="noopener">Quero um site assim</a><small id="pv-plano"></small></div>
+      </div>
+      <div class="mock-phone" aria-label="Prévia do site no celular"><div class="mock" id="mock"></div></div>
+    </div>
+  </section>
+
+  <section id="planos">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Planos e preços</span><h2>Preço fechado, sem surpresa</h2><p>Você escolhe o plano, eu monto tudo e te mostro antes de colocar no ar. Pode pedir ajustes até ficar do seu jeito.</p></div>
+      <div class="plans" id="plans"></div>
+      <div class="monthly">
+        <div class="price money" id="m-price"></div>
+        <p><b>Site no ar e cuidado todo mês:</b> hospedagem, cadeado de site seguro, até 2 alterações por mês (trocar preço, foto, horário) e suporte pelo WhatsApp.</p>
+      </div>
+      <div class="terms"><span><b>Pagamento:</b> metade para começar, metade na entrega, no Pix</span><span><b>Endereço próprio</b> (seunegocio.com.br): cerca de R$ 40 por ano, registrado no seu nome</span></div>
+      <div class="promo" id="promo"></div>
+      <h3 class="extras-title">Serviços extras</h3>
+      <div class="extras" id="extras"></div>
+    </div>
+  </section>
+
+  <section id="trabalhos" style="padding-top: 8px">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Trabalhos</span><h2>Feitos por mim</h2><p>Abra no seu celular e teste. Tudo funciona de verdade.</p></div>
+      <div class="works">
+        <article class="work big"><div class="shot"><img src="img/lancheria.jpg" alt="Cardápio da Lancheria Maré Alta no celular" loading="lazy"></div><div class="txt"><span class="kind">Cardápio com pedidos · demonstração</span><h3>Lancheria Maré Alta</h3><p>Adicionais, entrega por bairro, Pix com QR Code e pedido pronto no WhatsApp.</p><a href="/lancheria/">Testar o cardápio</a></div></article>
+        <article class="work big"><div class="shot"><img src="img/barbearia.jpg" alt="Agendamento da Barbearia Farol no celular" loading="lazy"></div><div class="txt"><span class="kind">Agendamento · demonstração</span><h3>Barbearia Farol</h3><p>Cliente escolhe serviços, barbeiro, dia e um horário livre. Confirma pelo WhatsApp.</p><a href="/barbearia/">Testar o agendamento</a></div></article>
+        <article class="work big"><div class="shot"><img src="img/pousada.jpg" alt="Site da Pousada Brisa do Mar no celular" loading="lazy"></div><div class="txt"><span class="kind">Reservas · demonstração</span><h3>Pousada Brisa do Mar</h3><p>Quartos, preço por temporada calculado pelas datas e reserva pelo WhatsApp.</p><a href="/pousada/">Testar a reserva</a></div></article>
+        <article class="work"><div class="shot"><img src="img/palavra-viva.jpg" alt="Site Palavra Viva com o versículo do dia" loading="lazy"></div><div class="txt"><span class="kind">Site de conteúdo</span><h3>Palavra Viva</h3><p>Versículo do dia, oração, plano de leitura, voz e imagem para compartilhar. Aparece no Google.</p><a href="https://www.hallysilva.com.br" target="_blank" rel="noopener">Abrir o site</a></div></article>
+        <article class="work"><div class="shot"><img src="img/maribelinha.jpg" alt="Jogo Maribelinha e as Borboletas" loading="lazy"></div><div class="txt"><span class="kind">Jogo · aplicativo de celular</span><h3>Maribelinha e as Borboletas</h3><p>Jogo infantil com 50 fases e historinha. Instala no celular e funciona sem internet.</p><a href="https://maribelinha.hallysilva.com.br" target="_blank" rel="noopener">Jogar</a></div></article>
+        <article class="work"><div class="shot"><img src="img/treino-mira.jpg" alt="Treino de Mira, jogo 3D no navegador" loading="lazy"></div><div class="txt"><span class="kind">Jogo 3D no navegador</span><h3>Treino de Mira</h3><p>Treino para jogos de tiro com mapa 3D, bots e ranking de patentes.</p><a href="https://mira.hallysilva.com.br" target="_blank" rel="noopener">Abrir no computador</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top: 8px">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Como funciona</span><h2>Do primeiro oi ao site no ar</h2></div>
+      <div class="steps">
+        <div class="step"><b>Conversa no WhatsApp</b><p>Você me conta do seu negócio e manda fotos, preços e horários. Eu digo o plano certo e o valor.</p></div>
+        <div class="step"><b>Eu monto e te mostro</b><p>Em até 7 dias você recebe um link para ver no celular e pede os ajustes que quiser.</p></div>
+        <div class="step"><b>Site no ar</b><p>Coloco no seu endereço, mostro como funciona e você começa a receber clientes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="duvidas" style="padding-top: 8px">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Dúvidas</span><h2>Perguntas comuns</h2></div>
+      <div class="faq">
+        <details><summary>Preciso entender de computador?</summary><p>Não. Eu cuido de tudo. Se quiser mudar um preço do cardápio, é só me mandar mensagem ou mudar numa planilha no celular, que eu te ensino.</p></details>
+        <details><summary>O site fica no meu nome?</summary><p>Sim. O endereço (seunegocio.com.br) é registrado no seu nome e é seu.</p></details>
+        <details><summary>E se eu quiser mudar alguma coisa depois?</summary><p>A mensalidade já inclui até 2 alterações por mês, como trocar preço, foto ou horário. Mudanças maiores eu combino o valor antes.</p></details>
+        <details><summary>Preciso pagar a mensalidade?</summary><p>Ela mantém o site no ar, seguro e atualizado. Sem ela, eu entrego os arquivos e você hospeda onde quiser.</p></details>
+        <details><summary>Atende fora de Cidreira?</summary><p>Sim. Atendo todo o litoral norte e também à distância, para qualquer cidade, tudo pelo WhatsApp.</p></details>
+        <details><summary>Já tenho Instagram. Por que um site?</summary><p>No site o cliente vê o cardápio ou os horários, faz o pedido e paga sem esperar resposta, e ele aparece quando alguém procura no Google. O Instagram continua junto, com o link do site na bio.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" id="orcamento">
+    <div class="wrap">
+      <div>
+        <div class="head" style="margin-bottom: 0"><span class="eyebrow">Orçamento</span><h2>Me conta do seu negócio</h2><p>Preencha e toque no botão: a mensagem já vai pronta para o meu WhatsApp. Respondo no mesmo dia.</p></div>
+        <div class="contact">
+          <div><span>WhatsApp</span><b id="c-fone"></b></div>
+          <div><span>Atendo</span><b id="c-area"></b></div>
+          <div><span>Horário</span><b>Segunda a sábado, 9h às 20h</b></div>
+        </div>
+      </div>
+      <form id="form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="q-nome">Seu nome</label><input id="q-nome" autocomplete="name" placeholder="Ex.: Carla"></div>
+          <div class="field"><label for="q-neg">Nome do negócio</label><input id="q-neg" placeholder="Ex.: Pizzaria do Porto"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="q-tipo">Tipo de negócio</label><select id="q-tipo"><option>Lancheria ou pizzaria</option><option>Açaí ou sorveteria</option><option>Barbearia</option><option>Salão ou manicure</option><option>Pousada</option><option>Pet shop</option><option>Oficina</option><option>Loja</option><option>Clínica ou consultório</option><option>Outro</option></select></div>
+          <div class="field"><label for="q-plano">Plano</label><select id="q-plano"></select></div>
+        </div>
+        <div class="field"><span style="font-size:13.5px;font-weight:700;color:var(--muted)">Extras (opcional)</span><div class="checks" id="q-extras"></div></div>
+        <div class="estimate"><span>Estimativa</span><b class="money" id="q-est"></b></div>
+        <div class="field"><label for="q-msg">O que você precisa? (opcional)</label><textarea id="q-msg" placeholder="Ex.: quero que os clientes façam pedido pelo celular e paguem no Pix"></textarea></div>
+        <a class="btn btn-wa" id="q-send" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>Enviar pelo WhatsApp</a>
+        <p class="note">Se o WhatsApp não abrir, me chame no número ao lado.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<a class="fab" id="fab" data-wa="flutuante" href="#" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg></a>
+<footer><div class="wrap"><span id="f-nome"></span><span>Sites para comércio · feitos à mão, um por um</span></div></footer>
+
+<script>
+(() => {
+  /* ======== Seus dados: troque aqui ======== */
+  const EU = {
+    nome: "HSprogram",
+    cidade: "Cidreira/RS",
+    area: "Cidreira, litoral norte e online",
+    whatsapp: "5551996043473", // só números com 55 e DDD
+    telefone: "(51) 99604-3473",
+    mensalidade: 40,
+    promo: "Primeiros 5 clientes: 20% de desconto em troca de poder mostrar o site aqui.",
+  };
+  const PLANOS = [
+    { id: "pagina", nome: "Página do Negócio", preco: 450, para: "Para aparecer no Google e receber contato.", exemplo: "/pousada/", itens: ["Página com fotos, serviços e preços", "Botões de WhatsApp e ligar", "Mapa, endereço e horário com aviso de aberto ou fechado", "Pronta para aparecer no Google", "Fica perfeita no celular e no computador", "Pronta em até 5 dias"] },
+    { id: "cardapio", nome: "Cardápio com Pedidos", preco: 900, para: "Para lancheria, pizzaria, açaí e delivery.", destaque: "Mais pedido", exemplo: "/lancheria/", itens: ["Tudo da Página do Negócio", "Cardápio digital com adicionais", "Entrega por bairro e pedido mínimo", "Pix com QR Code no valor do pedido", "Pedido chega pronto no seu WhatsApp", "Você muda preços numa planilha no celular", "Pronto em até 7 dias"] },
+    { id: "agenda", nome: "Agendamento", preco: 900, para: "Para barbearia, salão, clínica e pet shop.", exemplo: "/barbearia/", itens: ["Tudo da Página do Negócio", "Serviços com preço e duração", "Cliente escolhe o dia e um horário livre", "Confirmação pelo seu WhatsApp", "Galeria de fotos dos trabalhos", "Pronto em até 7 dias"] },
+  ];
+
+  const EXTRAS = [
+    { id: "google", ic: "📍", nome: "Google Meu Negócio", preco: 80, desc: "Cadastro do seu negócio no mapa do Google, com fotos, horário e telefone." },
+    { id: "qr", ic: "🔳", nome: "Plaquinha com QR Code", preco: 50, desc: "Arte pronta para imprimir e colar no balcão e nas mesas, levando direto ao site." },
+    { id: "logo", ic: "✏️", nome: "Logo simples", preco: 100, desc: "Uma marca limpa para quem ainda não tem, em versões para site e redes." },
+    { id: "insta", ic: "🔗", nome: "Link para o Instagram", preco: 50, desc: "Página de links bonita para a bio, com WhatsApp, cardápio e localização." },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const ok = /^55\d{10,11}$/.test(EU.whatsapp);
+  const wa = (text) => (ok ? `https://wa.me/${EU.whatsapp}?text=${encodeURIComponent(text)}` : "#");
+
+  $("setup").hidden = ok;
+  $("t-nome").textContent = EU.nome; $("t-sub").textContent = `Sites para comércio · ${EU.cidade}`;
+  $("t-eyebrow").textContent = `Programador · ${EU.cidade}`;
+  $("c-fone").textContent = EU.telefone || "(coloque seu número)"; $("c-area").textContent = EU.area;
+  $("f-nome").textContent = `© ${new Date().getFullYear()} ${EU.nome} · ${EU.cidade}`;
+  $("m-price").innerHTML = `${brl(EU.mensalidade)}<small>/mês</small>`;
+  $("promo").hidden = !EU.promo; $("promo").innerHTML = `<b>Começando agora:</b> ${esc(EU.promo)}`;
+
+  $("plans").innerHTML = PLANOS.map((p) => `<article class="plan${p.destaque ? " star" : ""}">${p.destaque ? `<span class="badge">${p.destaque}</span>` : ""}
+    <h3>${esc(p.nome)}</h3><p class="for">${esc(p.para)}</p>
+    <div class="price money">${brl(p.preco)}<small>uma vez</small></div>
+    <ul>${p.itens.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
+    <div class="foot">${p.exemplo ? `<a class="eg" href="${p.exemplo}">Ver um exemplo funcionando</a>` : ""}<a class="btn btn-wa" data-plano="${p.id}" href="#" target="_blank" rel="noopener">Quero este</a></div></article>`).join("");
+  $("q-plano").innerHTML = PLANOS.map((p) => `<option value="${p.id}">${esc(p.nome)} · ${brl(p.preco)}</option>`).join("") + '<option value="">Ainda não sei</option>';
+
+  const greet = `Olá, ${EU.nome}! Vi o seu site e quero um orçamento.`;
+  document.querySelectorAll("[data-wa]").forEach((a) => (a.href = wa(greet)));
+  document.querySelectorAll("[data-plano]").forEach((a) => { const p = PLANOS.find((x) => x.id === a.dataset.plano); a.href = wa(`Olá, ${EU.nome}! Tenho interesse no plano ${p.nome} (${brl(p.preco)}). Pode me explicar como funciona?`); });
+  document.querySelectorAll("a.btn").forEach((a) => { if (!ok && a.getAttribute("href") === "#") a.setAttribute("aria-disabled", "true"); });
+
+  $("extras").innerHTML = EXTRAS.map((x) => `<div class="extra"><span class="ic" aria-hidden="true">${x.ic}</span><b>${esc(x.nome)}</b><p>${esc(x.desc)}</p><span class="money">${brl(x.preco)}</span></div>`).join("");
+  $("q-extras").innerHTML = EXTRAS.map((x) => `<label><input type="checkbox" value="${x.id}">${esc(x.nome)} (+${brl(x.preco)})</label>`).join("");
+  const chosen = () => [...$("q-extras").querySelectorAll("input:checked")].map((i) => EXTRAS.find((x) => x.id === i.value));
+  function quote() {
+    const plano = PLANOS.find((p) => p.id === $("q-plano").value), ex = chosen();
+    const est = (plano ? plano.preco : 0) + ex.reduce((s, x) => s + x.preco, 0);
+    $("q-est").textContent = plano || ex.length ? `${brl(est)}${plano ? ` + ${brl(EU.mensalidade)}/mês` : ""}` : "a combinar";
+    return [
+      `Olá, ${EU.nome}! Quero um orçamento de site.`, "",
+      `Nome: ${$("q-nome").value.trim() || "-"}`,
+      `Negócio: ${$("q-neg").value.trim() || "-"} (${$("q-tipo").value})`,
+      `Plano: ${plano ? `${plano.nome} (${brl(plano.preco)})` : "ainda não sei"}`,
+      ex.length ? `Extras: ${ex.map((x) => `${x.nome} (${brl(x.preco)})`).join(", ")}` : null,
+      plano || ex.length ? `Estimativa: ${brl(est)}` : null,
+      $("q-msg").value.trim() ? `O que preciso: ${$("q-msg").value.trim()}` : null,
+    ].filter((l) => l !== null).join("\n");
+  }
+  const upd = () => { $("q-send").href = wa(quote()); };
+  ["q-nome", "q-neg", "q-msg"].forEach((id) => $(id).addEventListener("input", upd));
+  ["q-tipo", "q-plano"].forEach((id) => $(id).addEventListener("change", upd));
+  $("q-extras").addEventListener("change", upd);
+  const fab = () => $("fab").classList.toggle("on", scrollY > 500);
+  addEventListener("scroll", fab, { passive: true }); fab();
+  $("q-tipo").addEventListener("change", () => { const t = $("q-tipo").value; $("q-plano").value = /Lancheria|Açaí/.test(t) ? "cardapio" : /Barbearia|Salão|Pet|Clínica/.test(t) ? "agenda" : "pagina"; upd(); });
+  $("form").addEventListener("submit", (e) => e.preventDefault());
+  $("q-plano").value = "cardapio"; upd();
+
+  /* ======== Prévia ao vivo ======== */
+  const TIPOS = {
+    lancheria: ["Lancheria", "O lanche mais caprichado da cidade", "Fazer pedido", "Cardápio", [["Xis Salada", "R$ 34,90"], ["Xis Coração", "R$ 42,90"], ["Batata frita", "R$ 29,90"]], "cardapio"],
+    pizzaria: ["Pizzaria", "Pizza no capricho, quentinha na sua casa", "Pedir pizza", "Cardápio", [["Calabresa", "R$ 59,90"], ["Frango com catupiry", "R$ 64,90"], ["Portuguesa", "R$ 62,90"]], "cardapio"],
+    acai: ["Açaí", "Açaí cremoso do jeito que você gosta", "Montar meu açaí", "Cardápio", [["Açaí 300 ml", "R$ 16,90"], ["Açaí 500 ml", "R$ 22,90"], ["Adicionais", "a partir de R$ 3"]], "cardapio"],
+    barbearia: ["Barbearia", "Agende seu corte sem esperar resposta", "Agendar horário", "Serviços", [["Corte", "R$ 40"], ["Corte + barba", "R$ 65"], ["Barba", "R$ 30"]], "agenda"],
+    salao: ["Salão ou manicure", "Unhas, cabelo e autoestima em dia", "Agendar horário", "Serviços", [["Manicure", "R$ 35"], ["Escova", "R$ 50"], ["Sobrancelha", "R$ 30"]], "agenda"],
+    pousada: ["Pousada", "Pertinho do mar, com café da manhã", "Reservar pelo WhatsApp", "Quartos", [["Quarto casal", "R$ 220/noite"], ["Quarto família", "R$ 320/noite"], ["Café da manhã", "incluso"]], "pagina"],
+    petshop: ["Pet shop", "Banho, tosa e carinho para o seu pet", "Agendar banho", "Serviços", [["Banho pequeno porte", "R$ 45"], ["Banho e tosa", "R$ 80"], ["Leva e traz", "R$ 10"]], "agenda"],
+    loja: ["Loja", "Moda praia com entrega na cidade", "Comprar pelo WhatsApp", "Destaques", [["Biquíni", "R$ 89,90"], ["Saída de praia", "R$ 69,90"], ["Chinelo", "R$ 39,90"]], "pagina"],
+  };
+  const CORES = [["Azul", "#2f56e0"], ["Vermelho", "#d7392b"], ["Verde", "#1f8f5f"], ["Laranja", "#e06b12"], ["Roxo", "#7a4bd1"], ["Rosa", "#d1467f"], ["Grafite", "#2a2e3a"]];
+  const pv = { tipo: "pizzaria", cor: 1 };
+  $("pv-tipo").innerHTML = Object.entries(TIPOS).map(([k, t]) => `<option value="${k}">${t[0]}</option>`).join("");
+  $("pv-tipo").value = pv.tipo;
+  $("pv-cores").innerHTML = CORES.map(([n, c], i) => `<button type="button" class="sw" data-c="${i}" style="background:${c}" aria-label="${n}"></button>`).join("");
+  function preview() {
+    const t = TIPOS[pv.tipo], nome = $("pv-nome").value.trim() || "Seu Negócio", [corN, cor] = CORES[pv.cor];
+    document.querySelectorAll(".sw").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.c === pv.cor));
+    $("mock").style.setProperty("--c", cor);
+    $("mock").innerHTML = `<div class="bar"><i>${esc(nome[0].toUpperCase())}</i><b>${esc(nome)}</b><em>● Aberto agora</em></div>
+      <div class="hero2"><h4>${esc(nome)}</h4><p>${esc(t[1])}</p><span>${esc(t[2])}</span></div>
+      <div class="list"><h5>${esc(t[3])}</h5>${t[4].map(([a, b]) => `<div><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join("")}</div>
+      <div class="wa">${esc(t[2])} no WhatsApp</div>`;
+    const plano = PLANOS.find((p) => p.id === t[5]);
+    $("pv-plano").textContent = `Plano indicado: ${plano.nome} (${brl(plano.preco)})`;
+    $("pv-quero").href = wa(`Olá, ${EU.nome}! Fiz a prévia no seu site e quero um site assim:\n\nNegócio: ${nome} (${t[0]})\nCor: ${corN}\nPlano indicado: ${plano.nome} (${brl(plano.preco)})`);
+  }
+  $("pv-nome").addEventListener("input", preview);
+  $("pv-tipo").addEventListener("change", () => { pv.tipo = $("pv-tipo").value; preview(); });
+  $("pv-cores").addEventListener("click", (e) => { const b = e.target.closest("[data-c]"); if (b) { pv.cor = +b.dataset.c; preview(); } });
+  $("pv-form").addEventListener("submit", (e) => e.preventDefault());
+  preview();
+})();
+</script>
+</body>
+</html>

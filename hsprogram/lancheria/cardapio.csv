@@ -1,0 +1,22 @@
+categoria,nome,descricao,preco,destaque,disponivel,adicionais
+Xis,Xis Salada,"Hambúrguer, queijo, presunto, ovo e salada.",34.90,,sim,Bacon extra +5 | Ovo extra +3 | Queijo extra +4 | Cheddar +4 | Sem salada | Sem maionese
+Xis,Xis Frango,"Frango desfiado temperado, queijo e salada.",38.90,,sim,Bacon extra +5 | Ovo extra +3 | Queijo extra +4 | Catupiry +4 | Sem salada | Sem maionese
+Xis,Xis Calabresa,"Calabresa acebolada, queijo e salada.",39.90,,sim,Bacon extra +5 | Ovo extra +3 | Queijo extra +4 | Sem cebola | Sem salada
+Xis,Xis Coração,"Coração de frango na chapa, queijo e salada.",42.90,Mais pedido,sim,Bacon extra +5 | Ovo extra +3 | Queijo extra +4 | Cheddar +4 | Sem salada | Sem maionese
+Xis,Xis Maré Alta,"Dois hambúrgueres, bacon, calabresa, frango, ovo, queijo em dobro e salada.",49.90,Da casa,sim,Ovo extra +3 | Cheddar +4 | Catupiry +4 | Sem salada | Sem maionese
+Xis,Xis Vegetariano,"Ovo, queijo, palmito, milho, ervilha e salada.",33.90,,sim,Ovo extra +3 | Queijo extra +4 | Sem maionese
+Cachorro-quente,Cachorro Simples,"Uma salsicha, molho, milho, ervilha e batata palha.",18.90,,sim,Salsicha extra +3 | Queijo ralado +2 | Sem batata palha
+Cachorro-quente,Cachorro Completo,"Duas salsichas, molho, queijo ralado, milho, ervilha e batata palha.",24.90,,sim,Salsicha extra +3 | Bacon +4 | Sem batata palha
+Pastéis,Pastel de Carne,Carne moída com ovo e azeitona.,14.90,,sim,
+Pastéis,Pastel de Queijo,Muito queijo derretido.,13.90,,sim,
+Pastéis,Pastel de Camarão,Camarão refogado com catupiry.,19.90,,não,
+Porções,Batata Frita,"500 g, sequinha.",29.90,,sim,Cheddar +6 | Bacon +7
+Porções,Fritas com Cheddar e Bacon,500 g com cheddar cremoso e bacon.,39.90,,sim,
+Porções,Isca de Peixe,Filé de peixe empanado com molho tártaro.,54.90,Da praia,sim,Molho tártaro extra +4
+Porções,Anéis de Cebola,Empanados e crocantes.,32.90,,sim,
+Açaí,Açaí 300 ml,"Com granola, banana e leite condensado.",16.90,,sim,Morango +4 | Leite em pó +3 | Paçoca +3 | Creme de avelã +6
+Açaí,Açaí 500 ml,"Com granola, banana e leite condensado.",22.90,,sim,Morango +4 | Leite em pó +3 | Paçoca +3 | Creme de avelã +6
+Bebidas,Refrigerante lata,350 ml.,7.00,,sim,
+Bebidas,Refrigerante 2 litros,,15.00,,sim,
+Bebidas,Suco natural,"Laranja, abacaxi ou maracujá, 400 ml.",10.00,,sim,
+Bebidas,Água mineral,"500 ml, com ou sem gás.",4.50,,sim,

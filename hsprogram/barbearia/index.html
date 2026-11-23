@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Exemplo de site para barbearia com agendamento: serviços, barbeiro, dia e horário livre, confirmado pelo WhatsApp. Feito pela HSprogram.">
+<meta name="theme-color" content="#1b1d24">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Barbearia Farol">
+<meta property="og:description" content="Exemplo de site para barbearia com agendamento: serviços, barbeiro, dia e horário livre, confirmado pelo WhatsApp. Feito pela HSprogram.">
+<meta property="og:url" content="https://hsprogram.hallysilva.com.br/barbearia/">
+<meta property="og:image" content="https://hsprogram.hallysilva.com.br/img/lancheria.jpg">
+<link rel="canonical" href="https://hsprogram.hallysilva.com.br/barbearia/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Barbearia Farol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: faixa listrada de barbearia no topo; abertura curta; agendamento em 4 passos (serviços, barbeiro, dia, horário) com resumo fixo ao lado (computador) ou embaixo (celular) */
+:root {
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --ink: #1b1d24;
+  --muted: #61646f;
+  --line: #e2e3e8;
+  --red: #c8322f;
+  --navy: #22356b;
+  --navy-soft: #e8ecf7;
+  --ok: #1d8a4a;
+  --display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #101218; --surface: #181b23; --ink: #eceef3; --muted: #a3a7b4; --line: #2a2e3a; --red: #ff6a5f; --navy: #9db2ff; --navy-soft: #1f2640; --ok: #4cc77f; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #101218; --surface: #181b23; --ink: #eceef3; --muted: #a3a7b4; --line: #2a2e3a; --red: #ff6a5f; --navy: #9db2ff; --navy-soft: #1f2640; --ok: #4cc77f; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ink); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.wrap { width: 100%; max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+
+/* topo com a listra do poste de barbearia */
+.pole { height: 8px; background: repeating-linear-gradient(-45deg, var(--red) 0 12px, #fff 12px 24px, var(--navy) 24px 36px, #fff 36px 48px); }
+.top { background: var(--ink); color: var(--bg); }
+.top .wrap { display: flex; align-items: center; gap: 14px; padding-block: 14px; }
+.top b { font-family: var(--display); font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.top small { display: block; color: color-mix(in srgb, var(--bg) 70%, transparent); font-size: 13px; }
+.top .open { margin-left: auto; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.top .open i { width: 8px; height: 8px; border-radius: 50%; background: #4cc77f; }
+.top .open.closed i { background: #ff6a5f; }
+
+.hero { background: var(--ink); color: var(--bg); padding-block: 20px 34px; }
+.hero h1 { font-size: clamp(2.1rem, 6vw, 3.6rem); }
+.hero h1 span { color: var(--red); }
+.hero p { margin: 12px 0 0; max-width: 54ch; color: color-mix(in srgb, var(--bg) 78%, transparent); }
+.hero .info { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 16px; font-size: 14px; color: color-mix(in srgb, var(--bg) 78%, transparent); }
+.hero .info b { color: var(--bg); }
+
+/* agendamento */
+.book { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: start; padding-block: 26px 36px; }
+.stepbox { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
+.stepbox + .stepbox { margin-top: 14px; }
+.stepbox h2 { font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
+.stepbox h2 span { width: 28px; height: 28px; border-radius: 50%; background: var(--red); color: #fff; font-size: 15px; display: grid; place-items: center; flex: none; }
+.stepbox .sub { margin: -6px 0 0; color: var(--muted); font-size: 14.5px; }
+.svcs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.svc { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; cursor: pointer; background: var(--surface); }
+.svc input { width: 18px; height: 18px; accent-color: var(--red); margin: 0; }
+.svc b { display: block; font-size: 15px; }
+.svc small { color: var(--muted); font-size: 13px; }
+.svc .money { font-weight: 800; }
+.svc:has(input:checked) { border-color: var(--red); background: color-mix(in srgb, var(--red) 7%, var(--surface)); }
+.barbers { display: flex; flex-wrap: wrap; gap: 8px; }
+.barber { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 14px 6px 6px; background: var(--surface); font-weight: 700; }
+.barber i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-style: normal; font-family: var(--display); font-size: 15px; }
+.barber[aria-pressed="true"] { border-color: var(--red); background: color-mix(in srgb, var(--red) 7%, var(--surface)); }
+.days { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.day { flex: none; width: 66px; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 4px; background: var(--surface); display: grid; justify-items: center; gap: 0; }
+.day small { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.day b { font-family: var(--display); font-size: 1.4rem; line-height: 1.1; }
+.day em { font-style: normal; font-size: 11.5px; color: var(--muted); }
+.day[aria-pressed="true"] { border-color: var(--red); background: var(--red); color: #fff; }
+.day[aria-pressed="true"] small, .day[aria-pressed="true"] em { color: rgba(255, 255, 255, 0.85); }
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+.slot { border: 1.5px solid var(--line); border-radius: 10px; padding: 9px 0; background: var(--surface); font-weight: 800; font-variant-numeric: tabular-nums; }
+.slot:disabled { opacity: 0.35; text-decoration: line-through; cursor: not-allowed; }
+.slot[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--surface); }
+.none { color: var(--muted); font-size: 14.5px; margin: 0; }
+.legend { display: flex; gap: 16px; font-size: 13px; color: var(--muted); }
+
+/* resumo */
+.summary { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
+.summary h2 { font-size: 1.2rem; }
+.summary dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 12px; font-size: 14.5px; }
+.summary dt { color: var(--muted); }
+.summary dd { margin: 0; font-weight: 700; text-align: right; }
+.summary .total { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 10px; font-weight: 800; font-size: 1.15rem; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 13px; font-weight: 700; color: var(--muted); }
+.field input { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+.send { border: 0; border-radius: 12px; padding: 13px; background: #1faa53; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.send[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.send svg { width: 20px; height: 20px; }
+.err { margin: 0; color: var(--red); font-size: 13.5px; font-weight: 700; }
+.hint { margin: 0; color: var(--muted); font-size: 12.5px; }
+
+/* trabalhos e rodapé */
+.gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
+.cut { aspect-ratio: 1; border-radius: 14px; display: grid; align-content: end; padding: 12px; color: #fff; font-family: var(--display); text-transform: uppercase; letter-spacing: 0.03em; font-size: 1.05rem; position: relative; overflow: hidden; }
+.cut svg { position: absolute; inset: 14% 18% auto; width: 64%; opacity: 0.9; }
+.cut span { position: relative; }
+footer { background: var(--ink); color: color-mix(in srgb, var(--bg) 75%, transparent); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; padding-block: 18px calc(18px + env(safe-area-inset-bottom, 0px)); font-size: 13.5px; }
+
+@media (max-width: 860px) {
+  .book { grid-template-columns: minmax(0, 1fr); }
+  .summary { position: static; }
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) { .svcs { grid-template-columns: minmax(0, 1fr); } .top small { display: none; } }
+</style>
+</head>
+<body>
+<div class="pole" aria-hidden="true"></div>
+<header class="top"><div class="wrap">
+  <div><b>Barbearia Farol</b><small>Cidreira/RS · desde a beira da praia</small></div>
+  <span class="open" id="open"><i></i><span id="open-t"></span></span>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1>Agende seu corte <span>sem esperar resposta</span></h1>
+  <p>Escolha o serviço, o barbeiro, o dia e um horário livre. A confirmação chega pelo WhatsApp.</p>
+  <div class="info"><span><b>Ter a sex</b> 9h às 19h</span><span><b>Sábado</b> 8h às 18h</span><span><b>Dom e seg</b> fechado</span><span>Av. do Farol, 300 · Centro</span></div>
+</div></section>
+
+<main class="wrap book">
+  <div>
+    <div class="stepbox">
+      <h2><span>1</span>Serviços</h2><p class="sub">Pode escolher mais de um.</p>
+      <div class="svcs" id="svcs"></div>
+    </div>
+    <div class="stepbox">
+      <h2><span>2</span>Barbeiro</h2>
+      <div class="barbers" id="barbers" role="group" aria-label="Barbeiro"></div>
+    </div>
+    <div class="stepbox">
+      <h2><span>3</span>Dia</h2>
+      <div class="days" id="days" role="group" aria-label="Dia"></div>
+    </div>
+    <div class="stepbox">
+      <h2><span>4</span>Horário</h2>
+      <div class="legend"><span>Riscado = ocupado</span><span id="dur-note"></span></div>
+      <div class="slots" id="slots" role="group" aria-label="Horários"></div>
+      <p class="none" id="slots-none" hidden></p>
+    </div>
+    </div>
+  </div>
+
+  <aside class="summary" aria-labelledby="sum-t">
+    <h2 id="sum-t">Seu horário</h2>
+    <dl>
+      <dt>Serviços</dt><dd id="s-svc">—</dd>
+      <dt>Barbeiro</dt><dd id="s-bar">—</dd>
+      <dt>Dia</dt><dd id="s-day">—</dd>
+      <dt>Horário</dt><dd id="s-slot">—</dd>
+      <dt>Duração</dt><dd id="s-dur">—</dd>
+    </dl>
+    <div class="total"><span>Total</span><span class="money" id="s-total">R$ 0,00</span></div>
+    <div class="field"><label for="f-nome">Seu nome</label><input id="f-nome" autocomplete="name" placeholder="Ex.: Rafael"></div>
+    <p class="err" id="err"></p>
+    <a class="send" id="send" href="#" target="_blank" rel="noopener" aria-disabled="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg>Agendar pelo WhatsApp</a>
+    <p class="hint">Demonstração: os horários ocupados são de exemplo e o número é fictício.</p>
+  </aside>
+</main>
+<section class="wrap" style="padding-block: 0 50px" aria-label="Estilos que a gente faz">
+  <h2 style="font-size:1.25rem;margin-bottom:12px">Estilos que a gente faz</h2>
+    <div class="gallery" style="margin-top:0">
+      <div class="cut" style="background:#22356b"><svg viewBox="0 0 60 60"><path d="M12 34c0-14 8-24 18-24s18 10 18 24" fill="#fff" opacity=".25"/><path d="M14 30c3-10 9-15 16-15s13 5 16 15" fill="none" stroke="#fff" stroke-width="3"/><path d="M15 36h30" stroke="#fff" stroke-width="2" stroke-dasharray="2 3"/></svg><span>Degradê</span></div>
+      <div class="cut" style="background:#c8322f"><svg viewBox="0 0 60 60"><path d="M14 30c0-12 7-20 16-20s16 8 16 20" fill="#fff" opacity=".3"/><path d="M18 22c6-5 18-5 24 0" fill="none" stroke="#fff" stroke-width="3"/></svg><span>Social</span></div>
+      <div class="cut" style="background:#3d3f48"><svg viewBox="0 0 60 60"><path d="M16 26c2 16 8 24 14 24s12-8 14-24" fill="#fff" opacity=".3"/><path d="M18 30c4 10 8 14 12 14s8-4 12-14" fill="none" stroke="#fff" stroke-width="3"/></svg><span>Barba</span></div>
+      <div class="cut" style="background:#9a6a2c"><svg viewBox="0 0 60 60"><path d="M14 32c0-14 7-22 16-22s16 8 16 22" fill="#fff" opacity=".25"/><path d="M20 18l20 0M18 24l24 0" stroke="#fff" stroke-width="3"/></svg><span>Infantil</span></div>
+</section>
+
+<footer><div class="wrap"><span>Barbearia Farol · Av. do Farol, 300, Centro, Cidreira/RS</span><span>Site de demonstração: barbearia, endereço e telefone fictícios.</span></div></footer>
+
+<script>
+(() => {
+  /* ======== Configuração da barbearia ======== */
+  const BARB = {
+    nome: "Barbearia Farol", whatsapp: "5551999990000",
+    abre: { 2: [9, 19], 3: [9, 19], 4: [9, 19], 5: [9, 19], 6: [8, 18] }, // dia da semana: [abre, fecha]; 0 = domingo
+    passo: 30, // minutos entre um horário e outro
+    barbeiros: [{ nome: "Léo", cor: "#c8322f", dias: [2, 3, 4, 5, 6] }, { nome: "Diego", cor: "#22356b", dias: [3, 4, 5, 6] }],
+    servicos: [["Corte", 30, 40], ["Degradê", 40, 45], ["Barba", 30, 30], ["Corte + barba", 60, 65], ["Sobrancelha", 10, 15], ["Pigmentação", 30, 35], ["Corte infantil", 30, 35], ["Hidratação", 20, 25]],
+  };
+  const $ = (id) => document.getElementById(id);
+  const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const WD = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"], WDL = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+  const hm = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+  const nowBR = () => new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+
+  // horários já ocupados: exemplo que muda conforme o dia e o barbeiro (no site real vêm da agenda da barbearia)
+  function busy(date, bi, m) { const k = date.getFullYear() * 1e4 + (date.getMonth() + 1) * 100 + date.getDate(); const x = Math.sin(k * 0.013 + bi * 7.1 + m * 0.37) * 43758.5453; return x - Math.floor(x) < 0.38; }
+
+  const st = { svc: new Set([3]), barber: -1, day: null, slot: null, who: null };
+  const dur = () => [...st.svc].reduce((s, i) => s + BARB.servicos[i][1], 0);
+  const total = () => [...st.svc].reduce((s, i) => s + BARB.servicos[i][2], 0);
+  const need = () => Math.max(1, Math.ceil(dur() / BARB.passo));
+
+  // aberto agora
+  const n0 = nowBR(), h0 = BARB.abre[n0.getDay()], mm = n0.getHours() * 60 + n0.getMinutes();
+  const isOpen = h0 && mm >= h0[0] * 60 && mm < h0[1] * 60;
+  $("open").classList.toggle("closed", !isOpen); $("open-t").textContent = isOpen ? "Aberto agora" : "Fechado agora";
+
+  // 1. serviços
+  $("svcs").innerHTML = BARB.servicos.map(([n, d, p], i) => `<label class="svc"><input type="checkbox" value="${i}" ${st.svc.has(i) ? "checked" : ""}><span><b>${n}</b><small>${d} min</small></span><span class="money">${brl(p)}</span></label>`).join("");
+  $("svcs").addEventListener("change", (e) => { const i = +e.target.value; e.target.checked ? st.svc.add(i) : st.svc.delete(i); st.slot = null; render(); });
+
+  // 2. barbeiros
+  const barbOpts = [{ nome: "Qualquer um", cor: "#61646f" }, ...BARB.barbeiros];
+  $("barbers").innerHTML = barbOpts.map((b, i) => `<button type="button" class="barber" data-b="${i - 1}"><i style="background:${b.cor}">${i ? b.nome[0] : "?"}</i>${b.nome}</button>`).join("");
+  $("barbers").addEventListener("click", (e) => { const b = e.target.closest("[data-b]"); if (!b) return; st.barber = +b.dataset.b; st.slot = null; render(); });
+
+  // 3. próximos dias abertos
+  const days = []; for (let k = 0, d = nowBR(); days.length < 12 && k < 30; k++) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + k); if (BARB.abre[x.getDay()]) days.push(x); }
+  st.day = 0;
+  $("days").innerHTML = days.map((d, i) => `<button type="button" class="day" data-d="${i}"><small>${i === 0 && d.toDateString() === nowBR().toDateString() ? "hoje" : WD[d.getDay()]}</small><b>${d.getDate()}</b><em>${d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "")}</em></button>`).join("");
+  $("days").addEventListener("click", (e) => { const b = e.target.closest("[data-d]"); if (!b) return; st.day = +b.dataset.d; st.slot = null; render(); });
+
+  // 4. horários livres para a duração escolhida
+  function slotsFor(date) {
+    const [a, f] = BARB.abre[date.getDay()], today = date.toDateString() === nowBR().toDateString(), nowM = nowBR().getHours() * 60 + nowBR().getMinutes();
+    const who = st.barber >= 0 ? [st.barber] : BARB.barbeiros.map((_, i) => i);
+    const out = [];
+    for (let m = a * 60; m + dur() <= f * 60; m += BARB.passo) {
+      let free = null;
+      for (const bi of who) {
+        if (!BARB.barbeiros[bi].dias.includes(date.getDay())) continue;
+        let ok = true; for (let s = 0; s < need(); s++) if (busy(date, bi, m + s * BARB.passo)) ok = false;
+        if (ok) { free = bi; break; }
+      }
+      out.push({ m, free, past: today && m <= nowM + 20 });
+    }
+    return out;
+  }
+  $("slots").addEventListener("click", (e) => { const b = e.target.closest("[data-m]"); if (!b) return; st.slot = +b.dataset.m; st.who = +b.dataset.w; render(); });
+
+  function message() {
+    const d = days[st.day];
+    return [
+      `Olá, ${BARB.nome}! Quero agendar:`, "",
+      `Serviços: ${[...st.svc].map((i) => BARB.servicos[i][0]).join(" + ")}`,
+      `Dia: ${WDL[d.getDay()]}, ${d.toLocaleDateString("pt-BR")}`,
+      `Horário: ${hm(st.slot)} (cerca de ${dur()} min)`,
+      `Barbeiro: ${BARB.barbeiros[st.who].nome}`,
+      `Valor: ${brl(total())}`, "",
+      `Nome: ${$("f-nome").value.trim()}`,
+    ].join("\n");
+  }
+
+  function render() {
+    document.querySelectorAll(".barber").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.b === st.barber));
+    document.querySelectorAll(".day").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.d === st.day));
+    const d = days[st.day], list = st.svc.size ? slotsFor(d) : [];
+    const shown = list.filter((s) => !s.past);
+    $("slots").innerHTML = shown.map((s) => `<button type="button" class="slot" data-m="${s.m}" data-w="${s.free}" ${s.free === null ? "disabled" : ""} aria-pressed="${st.slot === s.m}">${hm(s.m)}</button>`).join("");
+    const anyFree = shown.some((s) => s.free !== null);
+    $("slots-none").hidden = st.svc.size && anyFree;
+    $("slots-none").textContent = !st.svc.size ? "Escolha pelo menos um serviço." : st.barber >= 0 && !BARB.barbeiros[st.barber].dias.includes(d.getDay()) ? `${BARB.barbeiros[st.barber].nome} não atende neste dia. Escolha outro dia ou outro barbeiro.` : "Não há horários livres neste dia. Escolha outro dia.";
+    $("dur-note").textContent = st.svc.size ? `Seu atendimento: cerca de ${dur()} min` : "";
+    if (st.slot !== null && !shown.some((s) => s.m === st.slot && s.free !== null)) st.slot = null;
+
+    $("s-svc").textContent = st.svc.size ? [...st.svc].map((i) => BARB.servicos[i][0]).join(" + ") : "—";
+    $("s-bar").textContent = st.slot !== null ? BARB.barbeiros[st.who].nome : st.barber >= 0 ? BARB.barbeiros[st.barber].nome : "Qualquer um";
+    $("s-day").textContent = `${WDL[d.getDay()]}, ${d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}`;
+    $("s-slot").textContent = st.slot !== null ? hm(st.slot) : "—";
+    $("s-dur").textContent = st.svc.size ? `${dur()} min` : "—";
+    $("s-total").textContent = brl(total());
+    const err = !st.svc.size ? "Escolha um serviço." : st.slot === null ? "Escolha um horário livre." : !$("f-nome").value.trim() ? "Escreva o seu nome." : "";
+    $("err").textContent = err;
+    $("send").setAttribute("aria-disabled", err ? "true" : "false");
+    $("send").href = err ? "#" : `https://wa.me/${BARB.whatsapp}?text=${encodeURIComponent(message())}`;
+  }
+  $("f-nome").addEventListener("input", render);
+  render();
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:60;background:#131a2c;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:9px 12px;border-radius:999px;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.25)">Exemplo feito pela HSprogram · ver planos</a>
+</body>
+</html>

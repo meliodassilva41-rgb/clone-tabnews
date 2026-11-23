@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Exemplo de site para pousada: quartos, preço por temporada e reserva pelo WhatsApp. Feito pela HSprogram.">
+<meta name="theme-color" content="#0e4a6b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pousada Brisa do Mar">
+<meta property="og:description" content="Exemplo de site para pousada: quartos, preço por temporada e reserva pelo WhatsApp. Feito pela HSprogram.">
+<meta property="og:url" content="https://hsprogram.hallysilva.com.br/pousada/">
+<meta property="og:image" content="https://hsprogram.hallysilva.com.br/img/lancheria.jpg">
+<link rel="canonical" href="https://hsprogram.hallysilva.com.br/pousada/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Pousada Brisa do Mar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: cena de praia desenhada na abertura; quartos em cartões; reserva com datas que calcula diárias por temporada; resumo que vira mensagem de WhatsApp */
+:root {
+  --bg: #f4f8fa;
+  --surface: #ffffff;
+  --ink: #102a3a;
+  --muted: #5a6e7a;
+  --line: #dbe6ec;
+  --ocean: #0e4a6b;
+  --sky: #e2f0f7;
+  --sun: #f29e4c;
+  --sun-ink: #3a1f00;
+  --display: "Sora", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0b1820; --surface: #12232d; --ink: #e6f0f5; --muted: #9db3bf; --line: #21384a; --ocean: #6cc0e8; --sky: #15303f; --sun: #ffb066; --sun-ink: #2d1700; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0b1820; --surface: #12232d; --ink: #e6f0f5; --muted: #9db3bf; --line: #21384a; --ocean: #6cc0e8; --sky: #15303f; --sun: #ffb066; --sun-ink: #2d1700; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: #0e4a6b; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.wrap { width: 100%; max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; text-wrap: balance; }
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+section { padding-block: 44px; }
+.head { display: grid; gap: 6px; margin-bottom: 20px; }
+.head h2 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); }
+.head p { margin: 0; color: var(--muted); }
+
+/* abertura com a praia */
+.hero { position: relative; background: linear-gradient(#7cc4e6, #bfe3f2 55%, #ffe1b8); color: #0c2c40; overflow: hidden; padding-block: 0; }
+.hero svg.scene { position: absolute; inset: auto 0 0 0; width: 100%; height: 55%; }
+.hero .wrap { position: relative; padding-block: 22px 150px; display: grid; gap: 12px; }
+.hero .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 1.1rem; }
+.hero .brand span { font-family: var(--body); font-weight: 700; font-size: 13px; background: rgba(255, 255, 255, 0.6); padding: 3px 10px; border-radius: 999px; }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); max-width: 14ch; margin-top: 26px; }
+.hero p { margin: 0; max-width: 46ch; font-size: 1.08rem; font-weight: 600; }
+.hero .cta { justify-self: start; margin-top: 8px; background: #0e4a6b; color: #fff; text-decoration: none; font-weight: 800; padding: 12px 20px; border-radius: 12px; }
+
+.perks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: -26px; position: relative; }
+.perks span { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 14.5px; box-shadow: 0 6px 16px rgba(16, 42, 58, 0.08); }
+
+/* quartos */
+.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.room { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+.room .pic { aspect-ratio: 16 / 10; background: var(--sky); display: grid; place-items: center; }
+.room .pic svg { width: 70%; }
+.room .txt { padding: 16px; display: grid; gap: 8px; flex: 1; align-content: start; }
+.room h3 { font-size: 1.15rem; }
+.room p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.room .prices { display: flex; gap: 14px; font-size: 14px; color: var(--muted); }
+.room .prices b { color: var(--ink); font-size: 1.05rem; }
+.room button { margin-top: 6px; justify-self: start; border: 1.5px solid var(--ocean); color: var(--ocean); background: transparent; border-radius: 10px; padding: 8px 14px; font-weight: 800; cursor: pointer; }
+
+/* reserva */
+.reserve { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.reserve .grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+.form { display: grid; gap: 12px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 13.5px; font-weight: 800; color: var(--muted); }
+.field input, .field select { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+.season { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.season table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.season th, .season td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+.season th { background: var(--sky); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.season td.money { text-align: right; }
+.season tr:last-child td { border-bottom: 0; }
+.sum { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 10px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+.sum h3 { font-size: 1.15rem; }
+.sum .lines { display: grid; gap: 4px; font-size: 14.5px; }
+.sum .lines div { display: flex; justify-content: space-between; gap: 10px; }
+.sum .total { display: flex; justify-content: space-between; font-weight: 800; font-size: 1.2rem; border-top: 1px solid var(--line); padding-top: 10px; }
+.send { border: 0; border-radius: 12px; padding: 13px; background: #1faa53; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.send[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.err { margin: 0; color: #c0392b; font-weight: 700; font-size: 13.5px; }
+.hint { margin: 0; color: var(--muted); font-size: 12.5px; }
+
+.where { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.where div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.where b { display: block; font-family: var(--display); font-size: 1.4rem; color: var(--ocean); }
+.where span { color: var(--muted); font-size: 14.5px; }
+footer { background: #0e4a6b; color: #d5e8f2; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 18px calc(18px + env(safe-area-inset-bottom, 0px)); font-size: 13.5px; }
+footer a { color: #fff; }
+
+@media (max-width: 860px) {
+  .rooms, .where { grid-template-columns: minmax(0, 1fr); }
+  .reserve .grid { grid-template-columns: minmax(0, 1fr); }
+  .sum { position: static; }
+}
+@media (max-width: 460px) { .row { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <svg class="scene" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <circle cx="960" cy="70" r="52" fill="#ffd27a"/>
+    <path d="M0 170 Q150 150 300 168 T600 165 T900 160 T1200 168 V300 H0Z" fill="#2f86b5"/>
+    <path d="M0 190 Q150 175 300 188 T600 186 T900 182 T1200 190" fill="none" stroke="#fff" stroke-width="4" opacity=".7"/>
+    <path d="M0 215 Q200 195 420 212 T820 206 T1200 214 V300 H0Z" fill="#f3d9a6"/>
+    <path d="M0 250 Q240 225 520 245 T1000 236 T1200 244 V300 H0Z" fill="#e8c58a"/>
+    <g transform="translate(120 140)"><rect x="0" y="40" width="120" height="62" fill="#fff"/><path d="M-10 44 L60 0 L130 44Z" fill="#e2603a"/><rect x="50" y="64" width="22" height="38" fill="#0e4a6b"/><rect x="14" y="56" width="22" height="18" fill="#7cc4e6"/><rect x="86" y="56" width="22" height="18" fill="#7cc4e6"/></g>
+    <g fill="#5d8c3a"><path d="M300 215 q5 -30 2 -50" stroke="#7a5230" stroke-width="5" fill="none"/><path d="M302 165 q-30 -5 -40 12 q22 -8 40 -12 q-8 -25 -30 -30 q24 10 30 30 q20 -22 42 -18 q-26 6 -42 18 q30 0 38 20 q-18 -14 -38 -20z"/></g>
+  </svg>
+  <div class="wrap">
+    <div class="brand">Pousada Brisa do Mar <span>Cidreira/RS</span></div>
+    <h1>Acorde com o barulho do mar</h1>
+    <p>A 150 metros da praia, com café da manhã caseiro incluso. Veja os quartos, escolha as datas e reserve pelo WhatsApp.</p>
+    <a class="cta" href="#reserva">Ver preço das minhas datas</a>
+  </div>
+</section>
+
+<div class="wrap perks" aria-label="O que a pousada oferece">
+  <span>☕ Café da manhã incluso</span><span>🌊 150 m da praia</span><span>📶 Wi-Fi</span><span>🚗 Garagem</span><span>❄️ Ar-condicionado</span><span>🐾 Aceita pet pequeno</span>
+</div>
+
+<section id="quartos">
+  <div class="wrap">
+    <div class="head"><h2>Quartos</h2><p>Preço por diária, com café da manhã. A alta temporada vai de 15 de dezembro a 28 de fevereiro.</p></div>
+    <div class="rooms" id="rooms"></div>
+  </div>
+</section>
+
+<section class="reserve" id="reserva">
+  <div class="wrap grid">
+    <div>
+      <div class="head"><h2>Reservar</h2><p>Escolha as datas e o quarto. O valor é calculado na hora, noite por noite.</p></div>
+      <div class="form">
+        <div class="row">
+          <div class="field"><label for="f-in">Chegada</label><input type="date" id="f-in"></div>
+          <div class="field"><label for="f-out">Saída</label><input type="date" id="f-out"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="f-room">Quarto</label><select id="f-room"></select></div>
+          <div class="field"><label for="f-guests">Hóspedes</label><select id="f-guests"></select></div>
+        </div>
+        <div class="field"><label for="f-name">Seu nome</label><input id="f-name" autocomplete="name" placeholder="Ex.: Juliana"></div>
+        <div class="season" aria-label="Tabela de preços">
+          <table><thead><tr><th>Quarto</th><th style="text-align:right">Baixa</th><th style="text-align:right">Alta</th></tr></thead><tbody id="ptable"></tbody></table>
+        </div>
+      </div>
+    </div>
+    <aside class="sum" aria-labelledby="sum-t">
+      <h3 id="sum-t">Sua reserva</h3>
+      <div class="lines" id="lines"></div>
+      <div class="total"><span>Total estimado</span><span class="money" id="total">—</span></div>
+      <p class="err" id="err"></p>
+      <a class="send" id="send" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir reserva no WhatsApp</a>
+      <p class="hint">A pousada confirma a disponibilidade e o sinal de 30% pelo WhatsApp.</p>
+    </aside>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Onde fica</h2><p>Rua das Dunas, 55, Centro, Cidreira/RS · <a href="https://www.google.com/maps/search/?api=1&query=Cidreira%2C%20RS" target="_blank" rel="noopener">abrir no mapa</a></p></div>
+    <div class="where"><div><b>150 m</b><span>da beira da praia</span></div><div><b>5 min</b><span>a pé do centro e dos restaurantes</span></div><div><b>1h30</b><span>de carro desde Porto Alegre</span></div></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Pousada Brisa do Mar · Rua das Dunas, 55, Cidreira/RS</span><span>Site de demonstração: pousada, endereço e telefone fictícios.</span></div></footer>
+
+<script>
+(() => {
+  /* ======== Configuração da pousada ======== */
+  const POUSADA = {
+    nome: "Pousada Brisa do Mar", whatsapp: "5551999990000",
+    alta: [[12, 15], [2, 28]],   // de 15/12 até 28/02
+    minAlta: 2,                  // diárias mínimas na alta temporada
+    quartos: [
+      { nome: "Quarto Casal", cap: 2, baixa: 180, alta: 260, desc: "Cama de casal, ar-condicionado, TV e banheiro privativo.", ico: "casal" },
+      { nome: "Suíte com Vista", cap: 2, baixa: 240, alta: 340, desc: "Varanda com vista para o mar, cama queen e frigobar.", ico: "vista" },
+      { nome: "Quarto Família", cap: 4, baixa: 260, alta: 380, desc: "Cama de casal e beliche, ideal para família com crianças.", ico: "familia" },
+    ],
+  };
+  const ICO = {
+    casal: '<svg viewBox="0 0 120 70"><rect x="10" y="30" width="100" height="26" rx="6" fill="#0e4a6b"/><rect x="14" y="20" width="40" height="16" rx="6" fill="#fff"/><rect x="66" y="20" width="40" height="16" rx="6" fill="#fff"/><rect x="10" y="54" width="8" height="12" fill="#0e4a6b"/><rect x="102" y="54" width="8" height="12" fill="#0e4a6b"/></svg>',
+    vista: '<svg viewBox="0 0 120 70"><rect x="20" y="6" width="80" height="44" rx="4" fill="#7cc4e6"/><path d="M20 34q20-8 40 0t40 0v16H20z" fill="#2f86b5"/><circle cx="82" cy="18" r="7" fill="#ffd27a"/><rect x="20" y="6" width="80" height="44" rx="4" fill="none" stroke="#0e4a6b" stroke-width="4"/><path d="M60 6v44" stroke="#0e4a6b" stroke-width="3"/><rect x="12" y="54" width="96" height="6" rx="3" fill="#0e4a6b"/></svg>',
+    familia: '<svg viewBox="0 0 120 70"><rect x="6" y="36" width="60" height="22" rx="5" fill="#0e4a6b"/><rect x="10" y="28" width="24" height="12" rx="5" fill="#fff"/><rect x="38" y="28" width="24" height="12" rx="5" fill="#fff"/><rect x="76" y="8" width="38" height="56" rx="3" fill="none" stroke="#f29e4c" stroke-width="4"/><rect x="78" y="26" width="34" height="8" fill="#f29e4c"/><rect x="78" y="52" width="34" height="8" fill="#f29e4c"/></svg>',
+  };
+  const $ = (id) => document.getElementById(id);
+  const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const parse = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+  const br = (d) => d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+  const isAlta = (d) => { const m = d.getMonth() + 1, day = d.getDate(), [[am, ad], [bm, bd]] = POUSADA.alta; return (m === am && day >= ad) || m === 1 || (m === bm && day <= bd) || (m > am); };
+
+  $("rooms").innerHTML = POUSADA.quartos.map((q, i) => `<article class="room"><div class="pic" aria-hidden="true">${ICO[q.ico]}</div><div class="txt"><h3>${q.nome}</h3><p>${q.desc} Até ${q.cap} pessoas.</p><div class="prices"><span>Baixa <b class="money">${brl(q.baixa)}</b></span><span>Alta <b class="money">${brl(q.alta)}</b></span></div><button type="button" data-room="${i}">Escolher este quarto</button></div></article>`).join("");
+  $("ptable").innerHTML = POUSADA.quartos.map((q) => `<tr><td>${q.nome}</td><td class="money">${brl(q.baixa)}</td><td class="money">${brl(q.alta)}</td></tr>`).join("");
+  $("f-room").innerHTML = POUSADA.quartos.map((q, i) => `<option value="${i}">${q.nome} (até ${q.cap})</option>`).join("");
+  function guestOpts() { const cap = POUSADA.quartos[+$("f-room").value].cap, cur = +$("f-guests").value || 2; $("f-guests").innerHTML = Array.from({ length: cap }, (_, i) => `<option value="${i + 1}">${i + 1} ${i ? "pessoas" : "pessoa"}</option>`).join(""); $("f-guests").value = Math.min(cur, cap); }
+
+  // datas iniciais: próximo sábado, 3 noites
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const a = new Date(t); a.setDate(t.getDate() + ((6 - t.getDay() + 7) % 7 || 7));
+  const b = new Date(a); b.setDate(a.getDate() + 3);
+  $("f-in").value = iso(a); $("f-out").value = iso(b); $("f-in").min = iso(t);
+  $("f-room").value = 2; guestOpts(); $("f-guests").value = 3;
+
+  function calc() {
+    if (!$("f-in").value || !$("f-out").value) return { err: "Escolha a chegada e a saída." };
+    const din = parse($("f-in").value), dout = parse($("f-out").value), q = POUSADA.quartos[+$("f-room").value];
+    if (din < t) return { err: "A chegada já passou. Escolha outra data." };
+    if (dout <= din) return { err: "A saída precisa ser depois da chegada." };
+    let alta = 0, baixa = 0;
+    for (let d = new Date(din); d < dout; d.setDate(d.getDate() + 1)) isAlta(d) ? alta++ : baixa++;
+    if (alta && alta + baixa < POUSADA.minAlta) return { err: `Na alta temporada o mínimo é de ${POUSADA.minAlta} diárias.` };
+    return { din, dout, q, alta, baixa, n: alta + baixa, total: alta * q.alta + baixa * q.baixa };
+  }
+  function render() {
+    const r = calc();
+    $("f-out").min = $("f-in").value;
+    if (r.err) { $("lines").innerHTML = ""; $("total").textContent = "—"; }
+    else {
+      $("lines").innerHTML = [`<div><span>${r.q.nome}</span><span>${$("f-guests").value} pess.</span></div>`, `<div><span>${br(r.din)} a ${br(r.dout)}</span><span>${r.n} ${r.n > 1 ? "noites" : "noite"}</span></div>`,
+        r.baixa ? `<div><span>${r.baixa} × baixa temporada</span><span class="money">${brl(r.baixa * r.q.baixa)}</span></div>` : "", r.alta ? `<div><span>${r.alta} × alta temporada</span><span class="money">${brl(r.alta * r.q.alta)}</span></div>` : "",
+        `<div><span>Café da manhã</span><span>incluso</span></div>`].join("");
+      $("total").textContent = brl(r.total);
+    }
+    const err = r.err || (!$("f-name").value.trim() ? "Escreva o seu nome." : "");
+    $("err").textContent = err;
+    $("send").setAttribute("aria-disabled", err ? "true" : "false");
+    $("send").href = err ? "#" : `https://wa.me/${POUSADA.whatsapp}?text=${encodeURIComponent([
+      `Olá, ${POUSADA.nome}! Quero reservar:`, "",
+      `Quarto: ${r.q.nome}`, `Hóspedes: ${$("f-guests").value}`,
+      `Chegada: ${br(r.din)}`, `Saída: ${br(r.dout)} (${r.n} ${r.n > 1 ? "noites" : "noite"})`,
+      `Total estimado: ${brl(r.total)}`, "", `Nome: ${$("f-name").value.trim()}`,
+    ].join("\n"))}`;
+  }
+  ["f-in", "f-out", "f-guests"].forEach((id) => $(id).addEventListener("change", render));
+  $("f-room").addEventListener("change", () => { guestOpts(); render(); });
+  $("f-name").addEventListener("input", render);
+  $("rooms").addEventListener("click", (e) => { const bt = e.target.closest("[data-room]"); if (!bt) return; $("f-room").value = bt.dataset.room; guestOpts(); render(); $("reserva").scrollIntoView({ behavior: "smooth" }); });
+  render();
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:60;background:#131a2c;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:9px 12px;border-radius:999px;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.25)">Exemplo feito pela HSprogram · ver planos</a>
+</body>
+</html>
